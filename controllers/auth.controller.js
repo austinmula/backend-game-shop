@@ -40,6 +40,20 @@ exports.createUser = async (req, res) => {
   }
 };
 
+exports.allUsers = (eq, res) => {
+  try {
+    let query = "SELECT * FROM users";
+    connection.query(query, (error, response) => {
+      if (error) return sendError(res, error, 400);
+
+      res.send(response);
+    });
+  } catch (error) {
+    console.log(error.message);
+    res.status(500).json("Internal Server error");
+  }
+};
+
 exports.login = async (req, res) => {
   const { email, password } = req.body;
   console.log(req.body);
@@ -63,6 +77,7 @@ exports.login = async (req, res) => {
 
       // Assign JWT
       const token = jwtGenerator(response[0].id);
+      console.log(token);
       res.json({
         token: token,
         role_id: response[0].role_id,

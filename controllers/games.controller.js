@@ -41,6 +41,20 @@ exports.getAllGames = async (req, res) => {
   }
 };
 
+exports.deleteGame = async (req, res) => {
+  try {
+    let query = "DELETE from games WHERE id=?";
+    await con.query(query, [req.params.id], (error, response) => {
+      if (error) return sendError(res, error, 400);
+
+      res.send(response);
+    });
+  } catch (error) {
+    res.status(500).json(error.message);
+    console.log(error.message);
+  }
+};
+
 exports.getGamesByCategory = (req, res) => {
   const category = req.params.id;
   console.log(category);
